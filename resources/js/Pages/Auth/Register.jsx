@@ -3,6 +3,7 @@ import Button from '@/Components/Button';
 import Guest from '@/Layouts/Guest';
 import Input from '@/Components/Input';
 import Label from '@/Components/Label';
+import Select from '@/Components/select';
 import ValidationErrors from '@/Components/ValidationErrors';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 
@@ -10,9 +11,26 @@ export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
+        role: '',
         password: '',
         password_confirmation: '',
     });
+
+    const handleSelectChange = (e) => {
+        const selectedRole = e.target.value;
+    
+        // Update the 'role' field in the 'data' object directly
+        setData({
+            ...data,
+            role: selectedRole,
+        });
+    };
+    
+
+    const roles = [
+        { label: "User", value: "user" },
+        { label: "Admin", value: "admin" }
+    ];
 
     useEffect(() => {
         return () => {
@@ -47,8 +65,19 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                         required
+                    />
+                </div>
+                    
+                <div className="mt-4">
+                    <Label forInput="role" value="Role" />
+                    <Select
+                        name="role"
+                        className="mt-1 block w-full"
+                        value={data.role}
+                        options={roles}
+                        onChange={handleSelectChange}
                     />
                 </div>
 
@@ -61,7 +90,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                         required
                     />
                 </div>
@@ -75,7 +104,7 @@ export default function Register() {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                         required
                     />
                 </div>
@@ -88,7 +117,7 @@ export default function Register() {
                         name="password_confirmation"
                         value={data.password_confirmation}
                         className="mt-1 block w-full"
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                         required
                     />
                 </div>

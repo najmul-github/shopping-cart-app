@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class RegisteredUserController extends Controller
@@ -37,19 +38,26 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => 'required', 'string', 'min:4', 'confirmed',
+            'role' => 'required|in:user,admin',  
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        $user   =   User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
         ]);
 
-        event(new Registered($user));
+        // Fetch the role directly from the request
+        $role_id = $request->input('role') == 'user' ? 1 : 2;
 
-        Auth::login($user);
+        DB::table('role_user')->insert(['role_id' => $role_id,'user_id' => $user->id]);
 
-        return redirect(RouteServiceProvider::HOME);
+        
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard'); // Redirect admins to admin dashboard
+        }
+
+        return redirect()->route('user.dashboard'); // Redirect users to user dashboard or homepage;
     }
 }

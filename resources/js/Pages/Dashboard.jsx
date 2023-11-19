@@ -1,58 +1,95 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Head } from '@inertiajs/inertia-react'
+import Navbar from '@/Components/navbar'
+import Button from '@/Components/button'
+import Card from '@/Components/card'
 import axios from 'axios';
 
-function AdminDashboard({ unprocessedCarts }) {
-  const handleStatusUpdate = async (cartId, status) => {
+export default function Dashboards({ unprocessedCarts }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [listMyCart, setListMyCart] = useState([])
+  const [user, setUser] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    setListMyCart(unprocessedCarts); // Update listMyCart when cart prop changes
+    
+    // Fetch user data on component mount or when the user logs in
+    async function fetchUserData() {
+      try {
+        const response = await axios.get('/api/user');
+        const userData = response.data;
+        setUser(userData);
+      } catch (error) {
+        // Handle errors
+        console.error('Error fetching user data:', error);
+      }
+    }
+
+    fetchUserData();
+  }, [unprocessedCarts]);
+
+  const handleOpenSidebar = () => {
+    setIsOpen(true)
+  }
+
+  const handleCloseSideBar = () => {
+    setIsOpen(false)
+  }
+
+  const handleUserDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = async () => {
     try {
-      await axios.put(`/admin/orders/${cartId}/status`, { status });
-      // Handle any post-update actions or UI changes
+      // Make a logout request to your server-side logout endpoint
+      await axios.post('/logout');
+      window.location.reload(true)
+      // Clear user data on successful logout
+      setUser(null);
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error('Error logging out:', error);
     }
   };
 
-  return (
-    <div className="container-fluid dashboard-content vh-100">
-      <h3 className="py-3">Admin Dashboard - Orders/Cart Details</h3>
-      <div className="row mt-3 mb-5">
-        {unprocessedCarts.map((cart) => (
-          <div className="col-md-4 mb-2" key={cart.id}>
-            {/* Card setup */}
-            {/* ... */}
-            <div className="card-body pt-0">
-              <div className="row text-start">
-                <div className="col-md-12">
-                  <span>Cart Summary:</span>
-                </div>
-                <div className="col-md-10 timeline-status-count">
-                  <div className="cart-summary">
-                    <ul>
-                      {cart.items.map((item) => (
-                        <li key={item.id}>
-                          {item.name}({item.pivot.quantity}) - ${item.price}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="row mt-4">
-                <div className="col-md-4">
-                  <div className="assigned">
-                    <p className="follow-up">
-                      Total Product ::
-                      <span className="count">{cart.items.length}</span>
-                    </p>
-                  </div>
-                </div>
-                {/* ... Other columns */}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+  // console.log(listMyCart)
 
-export default AdminDashboard;
+  return (
+    <>
+      <Head title="Shopping Cart" />
+
+      <Navbar>
+        <div className="mb-2 sm:mb-0">
+          <h1 className="text-2xl no-underline text-white hover:text-blue-dark font-bold">
+            Shopping Cart App
+          </h1>
+        </div>
+        <Button name="btn-mycart" type="button" onClick={handleOpenSidebar}>
+          My Cart
+        </Button>
+        {user && (
+          <div className="relative">
+            <button className="text-white" onClick={handleUserDropdown}>
+              {user.name}
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute bg-white shadow mt-2 py-2 w-32 rounded">
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        )}
+      </Navbar>
+      
+      <section className="flex justify-center min-h-screen min-w-screen py-12 ">
+        <Card
+            unprocessedCarts={unprocessedCarts}
+            setListMyCart={setListMyCart}
+            handleOpenSidebar={handleOpenSidebar}
+        />  
+      </section>
+
+    </>
+  )
+}

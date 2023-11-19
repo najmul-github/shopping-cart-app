@@ -16,7 +16,9 @@ export default function Products({ products, cart, totalCalculatedPrice }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    setListMyCart(cart.items); // Update listMyCart when cart prop changes
+    if (cart && cart.items) {
+      setListMyCart(cart.items); // Update listMyCart when cart prop changes
+    }
     
     // Fetch user data on component mount or when the user logs in
     async function fetchUserData() {
@@ -31,7 +33,7 @@ export default function Products({ products, cart, totalCalculatedPrice }) {
     }
 
     fetchUserData();
-  }, [cart.items]);
+  }, [cart]);
 
   const handleOpenSidebar = () => {
     setIsOpen(true)
@@ -69,9 +71,15 @@ export default function Products({ products, cart, totalCalculatedPrice }) {
             Shopping Cart App
           </h1>
         </div>
-        <Button name="btn-mycart" type="button" onClick={handleOpenSidebar}>
-          My Cart
-        </Button>
+        {!user && (
+          <div className="mb-2 sm:mb-0">
+            <a href='/login' name="login" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' type="button"> Login </a>
+            <a href='/register' name="register" type="button" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded btn-mycraft"> Register </a>
+          </div>
+        )}
+        {user && (
+          <Button name="btn-mycart" type="button" onClick={handleOpenSidebar}> My Cart </Button>
+        )}
         {user && (
           <div className="relative">
             <button className="text-white" onClick={handleUserDropdown}>

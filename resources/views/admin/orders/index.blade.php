@@ -5,13 +5,13 @@
     <h3 class="py-3">Admin Dashboard - Orders/Cart Details</h3>
     <div class="row mt-3 mb-5">
         @foreach ($unprocessedCarts as $cart)
+        {{$cart}}
         <div class="col-md-4 mb-2">
             <div class="card text-center card-setup">
                 <div class="card-header header-style border-0 mb-0" style="background: #f5f7ff !important;">
                     <div class="row row-cols-lg-2 row-cols-1">
                         <div class="col text-start">
                             <a class="details text-decoration-none">
-                                {{$cart->user->name}}
                             </a>
                         </div>
                         <div class="col text-end">
