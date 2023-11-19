@@ -65,9 +65,6 @@ export default function Dashboards({ unprocessedCarts }) {
             Shopping Cart App
           </h1>
         </div>
-        <Button name="btn-mycart" type="button" onClick={handleOpenSidebar}>
-          My Cart
-        </Button>
         {user && (
           <div className="relative">
             <button className="text-white" onClick={handleUserDropdown}>

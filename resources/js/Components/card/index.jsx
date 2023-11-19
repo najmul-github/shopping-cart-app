@@ -1,5 +1,5 @@
 import React from 'react'
-import Product from '../product'
+import CardItem from '../cardListItem'
 
 function Card({
   unprocessedCarts,
@@ -9,9 +9,9 @@ function Card({
   return (
     <div className=" flex flex-wrap justify-center gap-8 max-w-5xl">
       {unprocessedCarts.length > 0 &&
-        unprocessedCarts.map((prodcartuct) => {
+        unprocessedCarts.map((product) => {
           return (
-            <Product
+            <CardItem
               key={product.id}
               product={product}
               listMyCart={listMyCart}

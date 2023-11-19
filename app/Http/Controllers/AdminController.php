@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,17 +16,17 @@ class AdminController extends Controller
     public function dashboard()
     {
         // Retrieve unprocessed carts for display in the admin panel
-        $unprocessedCarts = Cart::where('status', 'pending')->with('items','user')->get();
+        $unprocessedCarts = Cart::with('items','user')->get();
 
         return Inertia::render('Dashboard', [
             "unprocessedCarts" => $unprocessedCarts
         ]);
     }
 
-    public function updateOrderStatus($id, Request $request)
+    public function updateCartStatus($id, Request $request)
     {
-        // Update order status based on the provided $id
-        $status = $request->input('status');
+        // Update cart status based on the provided $id
+        $status = $request->input('status') ?? $productId = $request->status;
 
         $cart = Cart::find($id);  
         if ($cart) {

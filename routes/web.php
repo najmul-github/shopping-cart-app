@@ -20,11 +20,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::get('/', [ProductsController::class, "index"]);
-// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-// Route::post('/login', [LoginController::class, 'login']);
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -41,8 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/orders', [AdminController::class, 'dashboard'])->name('admin.orders');
-    Route::put('/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
+    Route::put('/carts/{id}/status', [AdminController::class, 'updateCartStatus'])->name('admin.updateCartStatus');
 
     // product related url    
     Route::get('/products/{id}', [ProductController::class, 'show']);
@@ -50,6 +44,5 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 });
-// 
 
 require __DIR__.'/auth.php';
