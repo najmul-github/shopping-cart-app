@@ -102,11 +102,11 @@ function CartListItem({ cartItem, listMyCart, setListMyCart }) {
 
   return (
     <div className="flex flex-col h-fit md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg ">
-      {/* <img
+      <img
         className=" w-full h-auto self-center md:ml-2 md:h-44 object-cover md:w-36 rounded-t-lg md:rounded-none md:rounded-l-lg"
         src={image_url}
         alt={name}
-      /> */}
+      />
       <div className="p-6 flex flex-col justify-start">
         <button
           className="self-end w-6 font-bold text-white bg-red-600 rounded text-md mb-2 hover:bg-black hover:bg-opacity-5 hover:text-red-600"

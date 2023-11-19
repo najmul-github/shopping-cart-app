@@ -59,7 +59,7 @@ function Product({ product, listMyCart, setListMyCart, handleOpenSidebar }) {
 
   return (
     <div className="max-w-xs rounded overflow-hidden bg-white shadow-lg">
-      {/* <img className="w-full" src={product.image_url} alt={product.title} /> */}
+      <img className="w-full" src={product.image_url} alt={product.title} />
       <div className="px-6 py-2">
         <h3 className="font-bold text-xl mb-2">{product.name}</h3>
         <p className="mb-2">{product.description}</p>
