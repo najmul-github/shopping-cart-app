@@ -5,7 +5,6 @@ import Input from '../input'
 
 function CartListItem({ cartItem, listMyCart, setListMyCart }) {
   const { id, name, image_url, price, pivot } = cartItem
-  // const { quantity } = pivot;
   const quantity = pivot ? pivot.quantity : 1;
 
   const handleRemoveCartItem = async () => {
@@ -90,13 +89,15 @@ function CartListItem({ cartItem, listMyCart, setListMyCart }) {
   }
 
   const handleQuantityChange = (updatedQuantity) => {
-    axios.put(`/edit-cart-item/${pivot.id}`, { new_quantity: updatedQuantity })
-      .then((response) => {
-        // Handle response if needed
-      })
+    if (cartItem.pivot && cartItem.pivot.id) {
+    axios.put(`/edit-cart-item/${cartItem.pivot.id}`, { new_quantity: updatedQuantity })
+      .then((response) => {})
       .catch((error) => {
         console.error('Error updating quantity:', error);
       });
+    } else {
+      console.error('Pivot ID not available for item:', cartItem);
+    }
   };
 
 

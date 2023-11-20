@@ -51,7 +51,14 @@ function Product({ product, listMyCart, setListMyCart, handleOpenSidebar }) {
       try {
         axios.post(`/add-to-cart`, { id: product.id })
         .then((response) => {
-          setListMyCart([...listMyCart, newCartItem]);
+          const newItemWithPivot = {
+            ...newCartItem,
+            pivot: {
+              ...newCartItem.pivot,
+              id: response.data.cartItemId, // Assuming response provides the cart item ID
+            },
+          };
+          setListMyCart([...listMyCart, newItemWithPivot]);
         })
         .catch((error) => {
             console.error('Error updating quantity:', error);
