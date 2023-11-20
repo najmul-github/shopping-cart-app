@@ -34,11 +34,18 @@ class CartController extends Controller
                 'cart_id' => $cart->id,
                 'product_id' => $productId,
             ]);
+
+            // Fetch the pivot data for the added product
+            $pivotData = $cart->items()->where('product_id', $productId)->first()->pivot;
+
+            // Get the ID of the newly added cart item
+            $cartItemId = $pivotData->id;
             // } catch (\Exception $e) {
             //     DB::rollback();
             //     // Handle exception (log or throw further)
             //     return redirect()->back()->with('error', 'Failed to add product to cart.');
             // }
+            return response()->json(['cartItemId' => $cartItemId]);
         }
 
         // Redirect to the home page or the cart page after adding the product
