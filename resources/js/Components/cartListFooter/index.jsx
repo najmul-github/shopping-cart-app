@@ -1,13 +1,15 @@
 import React from 'react'
 
-function CartListFooter({ totalCalculatedPrice }) {
+function CartListFooter({ listMyCart }) {
   const calculateTotalQuantity = () => {
     let totalPrices = 0
-
-    if (totalCalculatedPrice) {
-      return totalCalculatedPrice
+    if (listMyCart.length > 0) {
+      totalPrices = listMyCart.reduce((total, cartItem) => {
+        return total + cartItem.price * (cartItem.pivot ? cartItem.pivot.quantity : 1)
+      }, 0)
+      return totalPrices
     }
-    return 0;
+    return totalPrices
   }
 
   return (
