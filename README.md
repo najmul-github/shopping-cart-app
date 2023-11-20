@@ -1,7 +1,6 @@
 ## Installation Guide
 - Clone this repo.
-- Run `composer install`.
-- clone this repo
+- Run
 
 ```
     composer install
