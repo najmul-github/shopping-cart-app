@@ -37,20 +37,25 @@ function Product({ product, listMyCart, setListMyCart, handleOpenSidebar }) {
 
       setListMyCart(updateCartItem)
     } else {
+      // New item - Add it to the cart
+      const newCartItem = {
+        id,
+        image_url,
+        name,
+        price,
+        pivot: {
+          product_id: id,
+          quantity: 1, // Initial quantity for a new item
+        },
+      };
       try {
         axios.post(`/add-to-cart`, { id: product.id })
-        .then((response) => {})
+        .then((response) => {
+          setListMyCart([...listMyCart, newCartItem]);
+        })
         .catch((error) => {
             console.error('Error updating quantity:', error);
         });
-        const newCartItem = {
-          id,
-          image_url,
-          name,
-          price,
-        }
-        
-        setListMyCart([...listMyCart, newCartItem]);
       } catch (error) {
         console.error('Error adding item to cart:', error);
       }
