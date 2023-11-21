@@ -22,6 +22,17 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
+Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::put('/carts/{id}/status', [AdminController::class, 'updateCartStatus'])->name('admin.updateCartStatus');
+
+    // product related url    
+    Route::get('/products/{id}', [ProductController::class, 'show']);
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+});
+
 Route::group(['middleware' => 'auth'], function () {
     // Define a route to fetch user data
     Route::get('/api/user', function () { return Auth::user(); });
@@ -34,15 +45,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/dashboard', [ProductController::class, 'index'])->name('user.dashboard');
 });
 
-Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::put('/carts/{id}/status', [AdminController::class, 'updateCartStatus'])->name('admin.updateCartStatus');
-
-    // product related url    
-    Route::get('/products/{id}', [ProductController::class, 'show']);
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-});
 
 require __DIR__.'/auth.php';

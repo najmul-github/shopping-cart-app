@@ -50,10 +50,14 @@ export default function Products({ products, cart, totalCalculatedPrice }) {
   const handleLogout = async () => {
     try {
       // Make a logout request to your server-side logout endpoint
-      await axios.post('/logout');
-      window.location.reload(true)
-      // Clear user data on successful logout
-      setUser(null);
+      const response = await axios.post('/logout');
+      if (response.status === 200) {
+        // Clear user data on successful logout
+        setUser(null);
+        window.location.reload(true);
+      } else {
+        console.error('Unexpected status code:', response.status);
+      }
     } catch (error) {
       console.error('Error logging out:', error);
     }
